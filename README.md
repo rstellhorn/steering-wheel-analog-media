@@ -1,5 +1,6 @@
 # steering-wheel-analog-media
 Car Steering Wheel Media button interface to USB HID for Fixed Installation of a Tablet
+Uses a Arduino Leonardo or other ATmega32u4 or HID supported platform.
 
 Analog Steering Wheel Controls Interface
 
