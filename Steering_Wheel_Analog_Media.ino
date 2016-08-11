@@ -1,4 +1,4 @@
-/*
+ /*
 Analog Steering Wheel Controls Interface
 
 This uses an Analog input to measure the button presses
@@ -48,6 +48,16 @@ int lastSensorValue = 0;
 int buttonPress = 0;
 int keyHeld = 0;
 unsigned long keyHeldTimer = 0;
+int firstLoop = 1;
+
+void firstLoopRun() { //This gets run only on the first Loop
+  firstLoop = 0;
+//  delay(4000); //Make sure to give your device enough time to wake up
+//  BootKeyboard.write(KEY_SPACE);
+//  delay(1000);
+//  BootKeyboard.println("123456"); //Unlock code for your device
+//  delay(100);
+}
 
 void readSensor() { //This reads the input and makes sure that it's stable before continuing
     lastSensorValue = sensorValue;
@@ -78,6 +88,7 @@ void setup() {
 }
 
 void loop() {
+  if (firstLoop) { firstLoopRun(); }
   unsigned long currentMillis = millis();
   readSensor(); //Read the current button state
 
@@ -95,20 +106,6 @@ void loop() {
      delay(300);
      digitalWrite(pinLed, LOW);
      }
-    else if (buttonPress == sourceDown) {
-     digitalWrite(pinLed, HIGH);
-     keyHeldTimer = millis();
-     BootKeyboard.press(KEY_LEFT_ALT);
-     delay(100);
-     BootKeyboard.press(KEY_LEFT_SHIFT);
-     delay(100);
-     BootKeyboard.press(KEY_TAB);
-     delay(100);
-     BootKeyboard.release(KEY_TAB);
-     BootKeyboard.release(KEY_LEFT_SHIFT);
-     delay(300);
-     digitalWrite(pinLed, LOW);
-     }
    }
 
    //If the key hold timer has expired, release it
@@ -123,37 +120,57 @@ void loop() {
    //Now on to just detecting key presses
   else if (buttonPress == talk) {
     digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
     Consumer.write(MEDIA_VOLUME_MUTE);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == volumeUp) {
     digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
     Consumer.write(MEDIA_VOLUME_UP);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == volumeDown) {
     digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
     Consumer.write(MEDIA_VOLUME_DOWN);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == seekUp) {
     digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
     Consumer.write(MEDIA_NEXT);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == seekDown) {
     digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
     Consumer.write(MEDIA_PREVIOUS);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == prog) {
     digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
     Consumer.write(MEDIA_PLAY_PAUSE);
+    delay(300);
+    digitalWrite(pinLed, LOW);
+  }
+  else if (buttonPress == sourceDown) {
+    digitalWrite(pinLed, HIGH);
+    BootKeyboard.releaseAll();
+    keyHeld = 0;
+    Consumer.write(CONSUMER_BROWSER_HOME);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
@@ -173,19 +190,5 @@ void loop() {
     delay(300);
     digitalWrite(pinLed, LOW);
   }
-  else if (buttonPress == sourceDown) {
-    digitalWrite(pinLed, HIGH);
-    keyHeld = 1;
-    keyHeldTimer = millis();
-    BootKeyboard.press(KEY_LEFT_ALT);
-    delay(100);
-    BootKeyboard.press(KEY_LEFT_SHIFT);
-    delay(100);
-    BootKeyboard.press(KEY_TAB);
-    delay(100);
-    BootKeyboard.release(KEY_TAB);
-    BootKeyboard.release(KEY_LEFT_SHIFT);
-    delay(300);
-    digitalWrite(pinLed, LOW);
-  }
+
 }
