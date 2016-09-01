@@ -67,6 +67,8 @@ void readSensor() { //This reads the input and makes sure that it's stable befor
   else if (sensorValue >= 145 && sensorValue < 200) {buttonPress = sourceUp;}
   else if (sensorValue >= 200 && sensorValue < 300) {buttonPress = sourceDown;}
   else {buttonPress = 0;}
+  if (Serial.available()) {buttonPress = Serial.parseInt();} //Input 1-8 via serial to simulate buttons, no carrage return
+  if (buttonPress) {Serial.println(buttonPress);} //Print back out what button was detected via serial
 }
 
 void setup() {
@@ -75,6 +77,7 @@ void setup() {
   Consumer.begin(); //Consumer HID keyboard init
   System.begin(); //System HID keyboard init
   BootKeyboard.begin(); //Boot standard HID keyboard init
+  Serial.begin(); //Setup Serial for testing purposes
   
   //  The following code is to unlock your tablet if you choose to use a pin code.
   //  delay(4000); //Make sure to give your device enough time to wake up
