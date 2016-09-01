@@ -48,16 +48,6 @@ int lastSensorValue = 0;
 int buttonPress = 0;
 int keyHeld = 0;
 unsigned long keyHeldTimer = 0;
-int firstLoop = 1;
-
-void firstLoopRun() { //This gets run only on the first Loop
-  firstLoop = 0;
-//  delay(4000); //Make sure to give your device enough time to wake up
-//  BootKeyboard.write(KEY_SPACE);
-//  delay(1000);
-//  BootKeyboard.println("123456"); //Unlock code for your device
-//  delay(100);
-}
 
 void readSensor() { //This reads the input and makes sure that it's stable before continuing
     lastSensorValue = sensorValue;
@@ -85,10 +75,16 @@ void setup() {
   Consumer.begin(); //Consumer HID keyboard init
   System.begin(); //System HID keyboard init
   BootKeyboard.begin(); //Boot standard HID keyboard init
+  
+  //  The following code is to unlock your tablet if you choose to use a pin code.
+  //  delay(4000); //Make sure to give your device enough time to wake up
+  //  BootKeyboard.write(KEY_SPACE);
+  //  delay(1000);
+  //  BootKeyboard.println("123456"); //Unlock code for your device
+  //  delay(100);
 }
 
 void loop() {
-  if (firstLoop) { firstLoopRun(); }
   unsigned long currentMillis = millis();
   readSensor(); //Read the current button state
 
@@ -120,56 +116,42 @@ void loop() {
    //Now on to just detecting key presses
   else if (buttonPress == talk) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(MEDIA_VOLUME_MUTE);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == volumeUp) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(MEDIA_VOLUME_UP);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == volumeDown) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(MEDIA_VOLUME_DOWN);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == seekUp) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(MEDIA_NEXT);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == seekDown) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(MEDIA_PREVIOUS);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == prog) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(MEDIA_PLAY_PAUSE);
     delay(300);
     digitalWrite(pinLed, LOW);
   }
   else if (buttonPress == sourceDown) {
     digitalWrite(pinLed, HIGH);
-    BootKeyboard.releaseAll();
-    keyHeld = 0;
     Consumer.write(CONSUMER_BROWSER_HOME);
     delay(300);
     digitalWrite(pinLed, LOW);
